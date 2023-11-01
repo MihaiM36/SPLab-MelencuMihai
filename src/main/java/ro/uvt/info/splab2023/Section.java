@@ -5,27 +5,21 @@ import java.util.List;
 
 public class Section {
     private String title;
-    private List<Object> contents;
+    private List<Document> elements;
 
     public Section(String title) {
         this.title = title;
-        contents = new ArrayList<>();
+        this.elements = new ArrayList<>();
     }
 
-    public void add(Object content) {
-        contents.add(content);
+    public void add(Document element) {
+        elements.add(element);
     }
 
     public void print() {
-        System.out.println(title);
-        for (Object content : contents) {
-            if (content instanceof Paragraph) {
-                System.out.println("Paragraph: " + ((Paragraph)content).getContent());
-            } else if (content instanceof Section) {
-                ((Section)content).print();
-            } else if (content instanceof Image) {
-                System.out.println("Image with name:" + ((Image)content).getName());
-            }
+        System.out.println("Section: " + title);
+        for (Document element : elements) {
+            element.print();
         }
     }
 }
