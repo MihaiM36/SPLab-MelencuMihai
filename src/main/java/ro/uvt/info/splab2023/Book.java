@@ -33,12 +33,12 @@ public class Book {
         }
 
         // Print contents
-        for (Object content : contents) {
+       /* for (Object content : contents) {
             if (content instanceof Paragraph) {
                 System.out.println("Paragraph: " + ((Paragraph)content).getContent());
             } else if (content instanceof Section) {
                 ((Section)content).print();
             }
-        }
+        }*/
     }
 }
