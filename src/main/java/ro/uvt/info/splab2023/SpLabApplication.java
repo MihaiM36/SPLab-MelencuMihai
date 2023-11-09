@@ -2,6 +2,8 @@ package ro.uvt.info.splab2023;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
+
 @SpringBootApplication
 public class SpLabApplication {
 
@@ -30,3 +32,6 @@ public class SpLabApplication {
         }
 
 }
+
+
+
