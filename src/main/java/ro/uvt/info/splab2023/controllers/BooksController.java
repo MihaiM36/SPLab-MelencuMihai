@@ -12,17 +12,20 @@ public class BooksController {
     private final BooksService booksService;
     private final SynchronousCommandExecutor syncExecutor;
     private final AsynchronousCommandExecutor asyncExecutor;
-    private final BookCrudRepository bookCrudRepository; // Inject the CrudRepository
+    private final BookCrudRepository bookCrudRepository;
+    private final Subject allBooksSubject; // Inject the Subject for Observer pattern
 
     @Autowired
     public BooksController(BooksService booksService,
                            SynchronousCommandExecutor syncExecutor,
                            AsynchronousCommandExecutor asyncExecutor,
-                           BookCrudRepository bookCrudRepository) {
+                           BookCrudRepository bookCrudRepository,
+                           Subject allBooksSubject) {
         this.booksService = booksService;
         this.syncExecutor = syncExecutor;
         this.asyncExecutor = asyncExecutor;
         this.bookCrudRepository = bookCrudRepository;
+        this.allBooksSubject = allBooksSubject;
     }
 
     @GetMapping
@@ -34,8 +37,13 @@ public class BooksController {
     @PostMapping
     public String addBook(@RequestBody String book) {
         Command command = new AddBookCommand(booksService, book);
-        return asyncExecutor.execute(command);
+        String result = asyncExecutor.execute(command);
+
+        allBooksSubject.notifyObservers(book);
+
+        return result;
     }
+
 
     @PutMapping("/{id}")
     public String updateBook(@PathVariable String id, @RequestBody String book) {
