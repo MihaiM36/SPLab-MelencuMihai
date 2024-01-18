@@ -1,42 +1,48 @@
 package ro.uvt.info.splab2023.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.Map;
+import ro.uvt.info.splab2023.models.Book;
+import ro.uvt.info.splab2023.persistence.BooksRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BooksService {
-    private final Map<String, String> books = new HashMap<>();
 
-    public String getAllBooks() {
-        return books.values().toString();
+    private final BooksRepository booksRepository;
+
+    @Autowired
+    public BooksService(BooksRepository booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
-    public String getBookById(String id) {
-        return books.getOrDefault(id, "Book not found");
+    public Book addBook(String book) {
+       // return booksRepository.save(book);
+
+        return null;
     }
 
-    public String addBook(String book) {
-        String id = String.valueOf(books.size() + 1); // Generate a simple ID
-        books.put(id, book);
-        return "Book added with ID: " + id;
+    public Optional<Book> getBook(Long id) {
+        return booksRepository.findById(id);
     }
 
-    public String updateBook(String id, String book) {
-        if (books.containsKey(id)) {
-            books.put(id, book);
-            return "Book updated with ID: " + id;
-        } else {
-            return "Book not found with ID: " + id;
-        }
+    public List<Book> getAllBooks() {
+        return booksRepository.findAll();
     }
 
-    public String deleteBook(String id) {
-        if (books.containsKey(id)) {
-            books.remove(id);
-            return "Book deleted with ID: " + id;
-        } else {
-            return "Book not found with ID: " + id;
-        }
+    public Book updateBook(Long id, String updatedBook) {
+        return booksRepository.findById(id)
+                .map(booksRepository::save)
+                .orElseGet(() -> {
+                    //updatedBook.setId(id);
+                    //return booksRepository.save(updatedBook);
+                    return null;
+                });
+    }
+
+    public String deleteBook(Long id) {
+        booksRepository.deleteById(id);
+        return null;
     }
 }

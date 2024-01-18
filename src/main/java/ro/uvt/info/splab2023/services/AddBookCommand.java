@@ -11,6 +11,6 @@ public class AddBookCommand implements Command {
 
     @Override
     public String execute() {
-        return booksService.addBook(book);
+        return booksService.addBook(book).toString();
     }
 }

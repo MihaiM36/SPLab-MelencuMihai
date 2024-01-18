@@ -1,6 +1,8 @@
 package ro.uvt.info.splab2023.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ro.uvt.info.splab2023.persistence.BookCrudRepository;
 import ro.uvt.info.splab2023.services.*;
 
 @RestController
@@ -10,13 +12,17 @@ public class BooksController {
     private final BooksService booksService;
     private final SynchronousCommandExecutor syncExecutor;
     private final AsynchronousCommandExecutor asyncExecutor;
+    private final BookCrudRepository bookCrudRepository; // Inject the CrudRepository
 
+    @Autowired
     public BooksController(BooksService booksService,
                            SynchronousCommandExecutor syncExecutor,
-                           AsynchronousCommandExecutor asyncExecutor) {
+                           AsynchronousCommandExecutor asyncExecutor,
+                           BookCrudRepository bookCrudRepository) {
         this.booksService = booksService;
         this.syncExecutor = syncExecutor;
         this.asyncExecutor = asyncExecutor;
+        this.bookCrudRepository = bookCrudRepository;
     }
 
     @GetMapping

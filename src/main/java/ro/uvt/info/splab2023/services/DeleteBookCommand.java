@@ -11,6 +11,6 @@ public class DeleteBookCommand implements Command {
 
     @Override
     public String execute() {
-        return booksService.deleteBook(id);
+        return booksService.deleteBook(Long.valueOf(id));
     }
 }

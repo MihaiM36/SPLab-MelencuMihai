@@ -1,51 +1,51 @@
 package ro.uvt.info.splab2023.models;
+
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Book implements Visitee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private String title;
-    private List<Visitee> elements;
-    private List<Visitee> contents;
+
+    @Transient
     private ToC toC;
 
-    public Book(String title) {
-        this.title = title;
-        this.elements = new ArrayList<>();
-        this.toC = new ToC();
-        this.contents = new ArrayList<>();
-    }
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Section> elements = new ArrayList<>();
 
-    // Method to add elements to the book
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Visitee> contents = new ArrayList<>();
+
+
     public void addElement(Visitee element) {
-        elements.add(element);
-        // If the element is a Section, add its title to the Table of Contents
+        elements.add((Section) element);
         if (element instanceof Section) {
             Section section = (Section) element;
             toC.addTitle(section.getTitle());
         }
     }
+
     public void addContent(Visitee content) {
         contents.add(content);
-    }
-    public String getTitle() {
-        return title;
-    }
-
-    public ToC getTableOfContents() {
-        return toC;
-    }
-
-    public List<Visitee> getElements() {
-        return elements;
     }
 
     @Override
     public void accept(Visitor visitor) {
         visitor.visitBook(this);
+        for (Visitee element : elements) {
+            element.accept(visitor);
+        }
+        for (Visitee content : contents) {
+            content.accept(visitor);
+        }
         toC.accept(visitor);
     }
 
-    public List<Visitee> getContents() {
-        return contents;
+    public void setId(Long id) {
     }
 }

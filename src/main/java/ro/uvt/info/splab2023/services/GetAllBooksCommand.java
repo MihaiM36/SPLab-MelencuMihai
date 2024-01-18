@@ -9,6 +9,6 @@ public class GetAllBooksCommand implements Command {
 
     @Override
     public String execute() {
-        return booksService.getAllBooks();
+        return booksService.getAllBooks().toString();
     }
 }
